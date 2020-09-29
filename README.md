@@ -16,6 +16,11 @@ The default Twitter format shown below.
 import github.com/github/snowflake
 
 ```go
+
+// You can set your epoch time
+// but do not set the time before 69 years ago, then you should get the overflowed number
+snowflake.SetEpochTime(time.Now()) // default epoch time is 2020-01-01 00:00:00.000
+
 snowflake.SetMaxNode(5, 5, 12) // default 5, 5, 12
 
 worker, _ := snowflake.NewWorker(0, 0)
