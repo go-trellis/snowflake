@@ -18,13 +18,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package snowflake
 
 import (
+	"fmt"
 	"testing"
 )
 
 // Benchmarks Presence Update event with fake data.
+func TestNext(t *testing.T) {
+
+	SetDefEpochTime(1577808000000)
+	// SetMaxNode(10, 12)
+
+	worker, _ := NewWorker(1)
+
+	for i := 0; i < 10; i++ {
+		fmt.Println(worker.Next())
+		if i > 5 {
+			fmt.Println(worker.NextSleep())
+		}
+	}
+}
+
+// Benchmarks Presence Update event with fake data.
 func BenchmarkNext(b *testing.B) {
 
-	worker, _ := NewWorker(1, 1)
+	worker, _ := NewWorker(1)
 
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
@@ -33,9 +50,9 @@ func BenchmarkNext(b *testing.B) {
 }
 
 func BenchmarkNextMaxSequence(b *testing.B) {
-	SetMaxNode(0, 0, 22)
+	SetMaxNode(0, 22)
 
-	worker, _ := NewWorker(0, 0)
+	worker, _ := NewWorker(0)
 
 	b.ReportAllocs()
 
@@ -46,9 +63,9 @@ func BenchmarkNextMaxSequence(b *testing.B) {
 }
 
 func BenchmarkNextNoSequence(b *testing.B) {
-	SetMaxNode(5, 5, 0)
+	SetMaxNode(10, 0)
 
-	worker, _ := NewWorker(0, 0)
+	worker, _ := NewWorker(0)
 
 	b.ReportAllocs()
 
@@ -60,7 +77,7 @@ func BenchmarkNextNoSequence(b *testing.B) {
 
 func BenchmarkNextSleep(b *testing.B) {
 
-	worker, _ := NewWorker(1, 1)
+	worker, _ := NewWorker(1)
 
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
@@ -70,21 +87,20 @@ func BenchmarkNextSleep(b *testing.B) {
 }
 
 func BenchmarkNextSleepMaxSequence(b *testing.B) {
-	SetMaxNode(0, 0, 22)
+	SetMaxNode(0, 22)
 
-	worker, _ := NewWorker(0, 0)
+	worker, _ := NewWorker(0)
 
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
 		worker.NextSleep()
 	}
-
 }
 
 func BenchmarkNextSleepNoSequence(b *testing.B) {
-	SetMaxNode(5, 5, 0)
+	SetMaxNode(10, 0)
 
-	worker, _ := NewWorker(0, 0)
+	worker, _ := NewWorker(0)
 
 	b.ReportAllocs()
 
